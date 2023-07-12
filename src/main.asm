@@ -5,6 +5,8 @@ msg_rola db 'Hola,',0
 msg_bemvindo db ', bem-vindo ao programa de CALC IA-32\n',0
 msg_16ou32 db 'Vai trabalhar com 16 ou 32 bits (digite 0 para 16, e 1 para 32):\n', 0
 msg_menu db 'Menu:\n1-SOMA\n2-SUBSTRACAO\n3-MULTIPLICACAO\n4-DIBIDIR\n5-EXPONENCIAR\n6-MOD OPERATION\n7-SAIR\n', 0
+msg_overflow db 'OCORREU OVERFLOW\n',0
+; newline db 0x0d, 0x0a
 
 extern read16, read32, readstr, print16, print32, printstr
 extern soma, sub, mul, div, exp, mod
@@ -18,6 +20,7 @@ resultado resb 100
 
 global tamanho
 global resultado
+global msg_overflow
 
 section .text
 global _start
@@ -46,8 +49,10 @@ menu:   push msg_menu
         je _soma
         cmp byte [op], 2
         je _sub
+        ; push msg_overflow
         cmp byte [op], 3
         je _mul
+        ; pop msg_overflow
         cmp byte [op], 4
         je _div
         cmp byte [op], 5
