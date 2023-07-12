@@ -6,13 +6,18 @@ msg_bemvindo db ', bem-vindo ao programa de CALC IA-32\n',0
 msg_16ou32 db 'Vai trabalhar com 16 ou 32 bits (digite 0 para 16, e 1 para 32):\n', 0
 msg_menu db 'Menu:\n1-SOMA\n2-SUBSTRACAO\n3-MULTIPLICACAO\n4-DIBIDIR\n5-EXPONENCIAR\n6-MOD OPERATION\n7-SAIR\n', 0
 
+extern read16, read32, readstr, print16, print32, printstr
+extern soma, sub, mul, div, exp, mod
+
 section .bss
 
 user_name resb 100
 tamanho resb 1
 op resb 1
+resultado resb 100
 
 global tamanho
+global resultado
 
 section .text
 global _start
@@ -50,8 +55,7 @@ menu:   push msg_menu
         cmp byte [op], 6
         je _mod
         call exit
-        
-        
+          
 
 _soma:  call soma
         jmp menu
@@ -65,3 +69,6 @@ _exp:   call exp
         jmp menu
 _mod:   call mod
         jmp menu
+exit:   mov eax, 1
+        mov ebx, 0
+        int 80h
