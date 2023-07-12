@@ -1,5 +1,5 @@
 section .text
-extern resultado, tamanho
+extern resultado, tamanho, print32, print16, read32, read16
 global soma
 
 soma:
@@ -8,13 +8,13 @@ soma:
     cmp byte [tamanho], 0
     je soma16
 
-    # 32 bits
-    # ler numero usuario
+    ; 32 bits
+    ; ler numero usuario
     call read32
     mov ebx, eax
     call read32
     add eax, ebx
-    # imprime resultado
+    ; imprime resultado
     push eax
     push resultado
     call print32
@@ -23,14 +23,14 @@ soma:
     pop ebp
     ret
 
-    # 16 bits
+    ; 16 bits
 soma16:
-    # ler numero usuario
+    ; ler numero usuario
     call read16
     mov bx, ax
     call read16
     add ax, bx
-    # imprime resultado
+    ; imprime resultado
     push eax
     push resultado
     call print16

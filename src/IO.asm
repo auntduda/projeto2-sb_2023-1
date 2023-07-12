@@ -42,16 +42,17 @@ print32:
     
     ; i = 0 do {str[i] = (char)((Valor % 10) + 0x30);Valor = (int) (Valor / 10);If Valor != 0  str[i+1]= str[i]i = i+1} while (Valor != 0)str[i] = '/0'
     mov eax, [ebp+12]
+    mov ecx, 10
     ; converte o inteiro para caracteres
 print32_cv_loop:
     cdq
-    idiv 10
+    idiv ecx
     add edx, 0x30
     push edx
     cmp eax, 0
     jne print32_cv_loop
 
-    cmp [ebp+12], 0
+    cmp dword [ebp+12], 0
     jge print32_gz
     push '-'
     ; constroe a string, desempilhando os caracteres
@@ -64,7 +65,8 @@ print32_sb_loop:
     jne print32_sb_loop
 
     ; call printstr
-    push [ebp+8]
+    mov eax, [ebp+8]
+    push eax
     call printstr
 
     pop edx
@@ -81,7 +83,7 @@ printstr:
     mov ebx, 1
     mov ecx, [ebp+8]
 
-    push [ebp+8]
+    push ecx
     call strlen
     mov edx, eax
 
@@ -103,7 +105,7 @@ strlen:
 strlen_loop:
     inc eax
     inc ebx
-    cmp [ebx], 0
+    cmp byte [ebx], 0
     jne strlen_loop
     
     pop ebx
