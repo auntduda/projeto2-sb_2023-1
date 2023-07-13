@@ -143,7 +143,7 @@ readstr:    enter 0,0
 
 ; TODO: ARRUMAR print16
 ; imprime um inteiro de 16 bits
-; primeiro parametro (ebp+10) = numero de 16 bits
+; primeiro parametro (ebp+12) = numero de 16 bits
 ; segundo parametro (ebp+8) = ponteiro da string auxiliar, utilizada para construir a string que representa o numero
 print16:    enter 0,0
             ; guarda os valores dos registradores utilizados na pilha
@@ -156,7 +156,7 @@ print16:    enter 0,0
             ; o desempilhamento eh do ultimo pro primeiro, por isso empilhamos o 0 primeiro
             push word 0
             
-            mov ax, [ebp+10]
+            mov ax, [ebp+12]
             mov cx, 10
             cmp ax, 0
             jge print16_cv_loop
@@ -177,10 +177,10 @@ print16_cv_loop:
             cmp ax, 0
             jne print16_cv_loop
 
-            cmp word [ebp+10], 0
+            cmp word [ebp+12], 0
             jge print16_gz
             ; adiciona o caractere '-' na pilha se o numero for negativo
-            push '-'
+            push word '-'
             ; coloca ponteiro da string auxiliar em ebx
 print16_gz: mov ebx, [ebp+8]
             ; loop que constroe a string, desempilhando os caracteres

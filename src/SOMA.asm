@@ -65,13 +65,10 @@ soma16: ; comeca o frame de pilha com 2 bytes reservados para uma variavel local
         ; imprime resultado
         push msg_resultado
         call printstr
-        ; printa resultado de 32 bits
-        movsx eax, word [ebp-2]
-        ;push word [ebp-2]
-        push eax
+        ; printa resultado de 16 bits
+        push word [ebp-2]
         push aux_str
-        ;call print16
-        call print32
+        call print16
     
         leave
         ret

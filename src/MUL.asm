@@ -68,11 +68,9 @@ mul16:  ; comeca o frame de pilha com 2 bytes reservados para uma variavel local
         push msg_resultado
         call printstr
         ; printa resultado de 32 bits
-        ; push ax
-        push eax
+        push ax
         push aux_str
-        ;call print16
-        call print32
+        call print16
     
         leave
         ret
