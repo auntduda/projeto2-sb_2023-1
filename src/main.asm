@@ -1,66 +1,64 @@
 section .data
-
-msg_entrada db 'Bem-vindo! Digite seu nome:\n',0
-msg_rola db 'Hola,',0
-msg_bemvindo db ', bem-vindo ao programa de CALC IA-32\n',0
-msg_16ou32 db 'Vai trabalhar com 16 ou 32 bits (digite 0 para 16, e 1 para 32):\n', 0
-msg_menu db 'Menu:\n1-SOMA\n2-SUBSTRACAO\n3-MULTIPLICACAO\n4-DIBIDIR\n5-EXPONENCIAR\n6-MOD OPERATION\n7-SAIR\n', 0
-msg_overflow db 'OCORREU OVERFLOW\n',0
-; newline db 0x0d, 0x0a
-
-extern read16, read32, readstr, print16, print32, printstr
-extern soma, sub, mul, div, exp, mod
+msg_entrada db 'Bem-vindo! Digite seu nome: ',0
+msg_rola db 'Hola, ',0
+msg_bemvindo db ', bem-vindo ao programa de CALC IA-32',10,0
+msg_16ou32 db 'Vai trabalhar com 16 ou 32 bits (digite 0 para 16, e 1 para 32): ',0
+msg_menu db 10,'Menu:',10,'1-SOMA',10,'2-SUBSTRACAO',10,'3-MULTIPLICACAO',10,'4-DIBIDIR',10,'5-EXPONENCIAR',10,'6-MOD OPERATION',10,'7-SAIR',10,0
+msg_numero db 'Insira um numero: ',0
+msg_resultado db 'Resultado: ',0
+msg_overflow db 10,'OCORREU OVERFLOW',10,0
+newline db 10,0
 
 section .bss
-
 user_name resb 100
 tamanho resb 1
 op resb 1
-resultado resb 100
-
-global tamanho
-global resultado
-global msg_overflow
+aux_str resb 100
 
 section .text
+; funcoes publicos
 global _start
+; dados publicos
+global tamanho, aux_str, msg_overflow, msg_numero, msg_resultado
+; funcoes externas
+extern readstr, printstr, soma, sub, mul, div, exp, mod, exit
 
-_start: push msg_entrada
+%macro print 1
+        push %1
         call printstr
-        push user_name
+%endmacro
+%macro read 1
+        push %1
         call readstr
-        push msg_rola
-        call printstr
-        push user_name
-        call printstr
-        push msg_bemvindo
-        call printstr
-        push msg_16ou32
-        call printstr
-        push tamanho
-        call readstr
+%endmacro
+
+_start: print msg_entrada
+        read user_name
+        print msg_rola
+        print user_name
+        print msg_bemvindo
+        print msg_16ou32
+        read tamanho
+        ; transforma o tamanho de ASCII para inteiro
         sub byte [tamanho], 0x30
-menu:   push msg_menu
-        call printstr
-        push op
-        call readstr
+menu:   print msg_menu
+        read op
+        print newline
+        ; transforma o op de ASCII para inteiro
         sub byte [op], 0x30
         cmp byte [op], 1
         je _soma
         cmp byte [op], 2
         je _sub
-        ; push msg_overflow
         cmp byte [op], 3
         je _mul
-        ; pop msg_overflow
         cmp byte [op], 4
         je _div
         cmp byte [op], 5
         je _exp
         cmp byte [op], 6
         je _mod
-        call exit
-          
+        jmp exit
 
 _soma:  call soma
         jmp menu
@@ -74,6 +72,3 @@ _exp:   call exp
         jmp menu
 _mod:   call mod
         jmp menu
-exit:   mov eax, 1
-        mov ebx, 0
-        int 80h

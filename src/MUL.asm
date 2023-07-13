@@ -1,49 +1,82 @@
 section .text
-extern resultado, tamanho, print32, print16, read32, read16, printstr, msg_overflow
+; dados externos
+extern aux_str, tamanho, msg_numero, msg_resultado, msg_overflow
+; funcoes externas
+extern print32, print16, printstr, read32, read16, exit
+
+; funcoes publicas
 global mul
+mul:    ; se tamanho = 0, vai para multiplicacao de 16 bits
+        cmp byte [tamanho], 0
+        je mul16
+        ; 32 bits
+        ; comeca o frame de pilha com 4 bytes reservados para uma variavel local
+        enter 4, 0
 
-mul:        
-            push ebp
-            mov ebp, esp
-            cmp byte [tamanho],0
-            je mul16
+        push msg_numero
+        call printstr
+        ; ler numero usuario
+        push aux_str
+        call read32
+        ; guarda o primeiro numero como variavel local
+        mov [ebp-4], eax
 
-            ; 32 bits
-            ; ler numero usuario
-            call read32
-            mov ebx, eax
-            call read32
-            imul ebx
-            jo overflow
+        push msg_numero
+        call printstr
+        ; ler segundo numero
+        push aux_str
+        call read32
 
-            ; imprime resultado
-            push eax
-            push resultado
-            call print32
+        ; multiplica os dois numeros
+        imul dword [ebp-4]
+        jo mul_of
 
-            mov esp, ebp
-            pop ebp
-            ret
+        ; imprime resultado
+        push msg_resultado
+        call printstr
+        ; printa resultado de 32 bits
+        push eax
+        push aux_str
+        call print32
+    
+        leave
+        ret
 
-            ; 16 bits
-mul16:      
-            ; ler numero usuario
-            call read16
-            mov bx, ax
-            call read16
-            imul bx
-            jo overflow
+        ; 16 bits
+mul16:  ; comeca o frame de pilha com 2 bytes reservados para uma variavel local
+        enter 2, 0
+        
+        push msg_numero
+        call printstr
+        ; ler numero usuario
+        push aux_str
+        call read16
+        ; guarda o primeiro numero como variavel local
+        mov [ebp-2], ax
 
-            ; imprime resultado
-            push eax
-            push resultado
-            call print16
+        push msg_numero
+        call printstr
+        ; ler segundo numero
+        push aux_str
+        call read16
 
-            mov esp, ebp
-            pop ebp
-            ret
+        ; multiplica os dois numeros
+        imul word [ebp-2]
+        jo mul_of
 
-overflow:   
-            push msg_overflow
-            call printstr
-            ret
+        ; imprime resultado
+        push msg_resultado
+        call printstr
+        ; printa resultado de 32 bits
+        ; push ax
+        push eax
+        push aux_str
+        ;call print16
+        call print32
+    
+        leave
+        ret
+
+mul_of: push msg_overflow
+        call printstr
+        jmp exit

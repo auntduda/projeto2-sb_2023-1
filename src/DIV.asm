@@ -1,5 +1,5 @@
 section .text
-extern resultado, tamanho, print32, print16, read32, read16
+extern aux_str, tamanho, print32, print16, read32, read16
 global div
 
 div: ret
