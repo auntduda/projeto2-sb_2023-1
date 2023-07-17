@@ -18,7 +18,7 @@ div:    ; se tamanho = 0, vai para divisao de 16 bits
         ; ler numero usuario
         push aux_str
         call read32
-        ; guarda o primeiro numero como variavel local
+        ; colocando o primeiro numero em ebx para trocar os dados de endereco depois
         mov ebx, eax
 
         push msg_numero
@@ -28,8 +28,9 @@ div:    ; se tamanho = 0, vai para divisao de 16 bits
         call read32
 
         ; troca troca jequiti - trocando os operandos de lugar pra fazer a divisao direito
-        mov [ebp-4], eax
-        mov eax, ebx
+
+        mov [ebp-4], eax        ; guarda o primeiro numero (dividendo) como variavel local
+        mov eax, ebx            ; o segundo numero (divisor) estara em eax
 
         ; divide os dois numeros
         idiv dword [ebp-4]
@@ -55,18 +56,19 @@ div16:  ; comeca o frame de pilha com 2 bytes reservados para uma variavel local
         ; ler numero usuario
         push aux_str
         call read16
-        ; guarda o primeiro numero como variavel local
+        ; colocando o primeiro numero em ebx para trocar os dados de endereco depois
         mov bx, ax
 
         push msg_numero
         call printstr
         ; ler segundo numero
         push aux_str
-        call read16
+        call read32
 
         ; troca troca jequiti - trocando os operandos de lugar pra fazer a divisao direito
-        mov [ebp-2], ax
-        mov ax, bx
+        
+        mov [ebp-4], ax        ; guarda o primeiro numero (dividendo) como variavel local
+        mov ax, bx            ; o segundo numero (divisor) estara em eax
 
         ; divide os dois numeros
         idiv word [ebp-2]
