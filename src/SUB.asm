@@ -9,7 +9,6 @@ global sub
 sub:    ; se tamanho = 0, vai para subtracao de 16 bits
         cmp byte [tamanho], 0
         je sub16
-        ; 32 bits
         ; comeca o frame de pilha com 4 bytes reservados para uma variavel local
         enter 4, 0
 
