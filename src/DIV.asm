@@ -67,7 +67,7 @@ div16:  ; comeca o frame de pilha com 2 bytes reservados para uma variavel local
 
         ; troca troca jequiti - trocando os operandos de lugar pra fazer a divisao direito
         
-        mov [ebp-4], ax        ; guarda o primeiro numero (dividendo) como variavel local
+        mov [ebp-2], ax        ; guarda o primeiro numero (dividendo) como variavel local
         mov ax, bx            ; o segundo numero (divisor) estara em eax
 
         ; divide os dois numeros

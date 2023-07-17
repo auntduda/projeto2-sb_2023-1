@@ -32,6 +32,7 @@ mod:    ; se tamanho = 0, vai para divisao de 16 bits
         mov [ebp-4], eax        ; guarda o primeiro numero (dividendo) como variavel local
         mov eax, ebx            ; o segundo numero (divisor) estara em eax
 
+        cdq                     ; extensao de sinal de eax pra edx
         ; divide os dois numeros
         idiv dword [ebp-4]
         jo div_of
@@ -67,9 +68,10 @@ div16:  ; comeca o frame de pilha com 2 bytes reservados para uma variavel local
 
         ; troca troca jequiti - trocando os operandos de lugar pra fazer a divisao direito
         
-        mov [ebp-4], ax        ; guarda o primeiro numero (dividendo) como variavel local
+        mov [ebp-2], ax        ; guarda o primeiro numero (dividendo) como variavel local
         mov ax, bx             ; o segundo numero (divisor) estara em eax
 
+        cwd                    ; extensao de sinal de ax pra dx
         ; divide os dois numeros
         idiv word [ebp-2]
         jo div_of
