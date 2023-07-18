@@ -33,15 +33,22 @@ exp:        ;se tamanho = 0, vai para divisao de 16 bits
 
             mov esi, 1              ; iniciando o contador em 1, ja que tem base^1 em eax
 
-loop_exp32: imul eax
+loop_exp32: cmp esi, [ebp-4]
+            jnle fim
+            imul eax
             jo exp_of
             inc esi
-            cmp esi, [ebp-4]
-            jne loop_exp32
+            jmp loop_exp32
+
+; loop_exp32: imul eax
+;             jo exp_of
+;             inc esi
+;             cmp esi, [ebp-4]
+;             jne loop_exp32
 
 
             ; imprime resultado
-            push msg_resultado
+fim:        push msg_resultado
             call printstr
             ; printa resultado de 32 bits
             push eax
@@ -76,14 +83,21 @@ exp16:      ; 16 bits
 
             mov esi, 1             ; iniciando o contador em 1, ja que tem base^1 em ax
 
-loop_exp16: imul ax
+; loop_exp16: imul ax
+;             jo exp_of
+;             inc esi
+;             cmp esi, [ebp-2]
+;             jne loop_exp16
+
+loop_exp16: cmp esi, [ebp-2]
+            jnle fim16
+            imul ax
             jo exp_of
             inc esi
-            cmp esi, [ebp-2]
-            jne loop_exp16
+            jmp loop_exp16
 
             ; imprime resultado
-            push msg_resultado
+fim16:      push msg_resultado
             call printstr
             ; printa resultado de 32 bits
             push ax
