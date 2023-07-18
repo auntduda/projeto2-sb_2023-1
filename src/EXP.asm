@@ -34,8 +34,8 @@ exp:        ;se tamanho = 0, vai para divisao de 16 bits
             mov esi, 1              ; iniciando o contador em 1, ja que tem base^1 em eax
 
 loop_exp32: cmp esi, [ebp-4]
-            jnle fim
-            imul eax
+            jge fim
+            imul ebx
             jo exp_of
             inc esi
             jmp loop_exp32
@@ -90,8 +90,8 @@ exp16:      ; 16 bits
 ;             jne loop_exp16
 
 loop_exp16: cmp esi, [ebp-2]
-            jnle fim16
-            imul ax
+            jge fim16
+            imul bx
             jo exp_of
             inc esi
             jmp loop_exp16
