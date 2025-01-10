@@ -2,8 +2,8 @@
 
 ## Alunos
 
-- Davi Jesus de Almeida Paturi - 200016784
-- Maria Eduarda Carvalho Santos - 190092556
+- Davi Jesus
+- Maria Eduarda
 
 ## Descrição
 
